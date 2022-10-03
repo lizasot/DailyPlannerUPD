@@ -2,4 +2,5 @@
 from Interface.ConsoleInterface import ConsoleInterface as Interface
 
 process = Interface()
+
 process.start()
