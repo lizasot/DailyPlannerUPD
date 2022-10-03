@@ -42,6 +42,7 @@ class CommandHandler():
     def mark_completed(self, params : list):
         pass
 
+    #params: <user_id>, <new_task_content>
     def add_new_task(self, params : list):
         pass
 

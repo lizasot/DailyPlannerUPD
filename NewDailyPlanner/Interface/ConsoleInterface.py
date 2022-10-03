@@ -1,5 +1,4 @@
 from time import sleep
-from turtle import pen
 
 import keyboard
 
