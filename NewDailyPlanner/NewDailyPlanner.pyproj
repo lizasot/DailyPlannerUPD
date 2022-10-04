@@ -30,6 +30,7 @@
     <Compile Include="AppLogic\Objects\MenuOption.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="config.py" />
     <Compile Include="Interface\Base\UserInterface.py">
       <SubType>Code</SubType>
     </Compile>

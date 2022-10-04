@@ -6,5 +6,13 @@ class UserInterface(ABC):
         """обработчик команд"""
 
     @abstractmethod
+    def choose_task():
+        """запросить у пользователя выбор задачи"""
+
+    @abstractmethod
+    def enter_content_task():
+        """запросить у пользователя содержание задачи"""
+
+    @abstractmethod
     def start():
         """стартовая точка программы"""

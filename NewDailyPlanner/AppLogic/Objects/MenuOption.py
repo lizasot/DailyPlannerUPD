@@ -1,7 +1,9 @@
 class MenuOption(object):
-    def __init__(self, name, description):
+    def __init__(self, name, description, index_task = False, content_str = False):
         self._name = name
         self._description = description
+        self._index_task = index_task
+        self._content_str = content_str
         
     #full_name
     @property
@@ -22,3 +24,24 @@ class MenuOption(object):
     def description(self, description):
         if description is str:
             self._description = description
+
+    #need params
+    ##index_task
+    @property
+    def index_task(self):
+        return self._index_task
+
+    @index_task.setter
+    def index_task(self, index_task):
+        if index_task is bool:
+            self._index_task = index_task
+
+    ##content_str
+    @property
+    def content_str(self):
+        return self._content_str
+
+    @content_str.setter
+    def content_str(self, content_str):
+        if content_str is bool:
+            self._content_str = content_str

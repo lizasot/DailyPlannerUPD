@@ -1,4 +1,5 @@
 from time import sleep
+from urllib import request
 
 import keyboard
 
@@ -36,14 +37,35 @@ class ConsoleInterface(UserInterface):
             input()
             return 0
 
-    #команды для вывода данных
-    def print_list(self, options : list, select_ind : int):
+    def get_index_choice(self, choice, options : list):
+        for x in range(0, len(options)):
+            if choice == options[x]:
+                return x
+        return -1
+
+    #команды с выводом на экран
+    def choose_task(self):
+        tasks = self.command_handler.get_tasks()
+        if len(tasks) == 0:
+            print('На данный момент у вас нет задач.')
+            input()
+            return -1
+        else:
+            text_for_repeat = lambda: print('Выберите нужную вам задачу.\n=================')
+            option = self.get_option(tasks, text_for_repeat)
+            return tasks.index(option)
+        
+    def enter_content_task(self):
+        print('Введите содержание задачи: ', end = '')
+        return input()
+
+    def print_list(self, options : list, select_ind : int = -1):
         if len(options) > 0:
             for x in range(0, len(options)):
                 if x == select_ind:
-                    print('[*]', end='')
+                    print('[*] ', end='')
                 else:
-                    print('[ ]', end='')
+                    print('[ ] ', end='')
                 print(options[x])
                 
     def choice_handler(self, choice : int, choice_ind : int, l : list):
@@ -65,10 +87,10 @@ class ConsoleInterface(UserInterface):
                 choice_ind = self.choice_handler(choice, choice_ind, options)
         return options[choice_ind]
 
-    def display_tasks(self, select_ind : int = -1):
-        tasks = self.command_handler.get_tasks(self.user_id)
+    def display_tasks(self):
+        tasks = self.command_handler.get_tasks()
         if len(tasks) > 0:
-            self.printList(tasks)
+            self.print_list(tasks)
             print('=================')
 
     def display_menu(self, select_ind : int):
@@ -84,6 +106,15 @@ class ConsoleInterface(UserInterface):
     #стартовая точка программы
     def start(self):
         end = False
+        params : list = []
         while not end:
+            params.clear()
             text_for_repeat = lambda: self.display_tasks()
-            option = self.get_option(self.command_handler.get_menu_desriptions(), text_for_repeat)
+            option = self.command_handler.get_name_by_description_option(self.get_option(self.command_handler.get_menu_desriptions(), text_for_repeat))
+            request_for_params = self.command_handler.check_which_parameters_for_command(option)
+            for x in request_for_params:
+                success = params.append(eval(f'self.{x}()'))
+                if success == -1:
+                    break
+            if not ('' in params) and not (-1 in params):
+                self.command_handler.process_command(option, params)
