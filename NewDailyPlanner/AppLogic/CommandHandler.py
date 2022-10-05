@@ -54,7 +54,9 @@ class CommandHandler():
     def mark_completed(self, params : list, user_id):
         if len(params) > 0:
             tasks = self.get_tasks(user_id)
-            self.data_keeper.add_complited_tasks_by_id(user_id, tasks.pop(int(params[0])))
+            task = tasks.pop(int(params[0]))
+            self.data_keeper.log_complited_task(user_id, task)
+            self.data_keeper.add_complited_tasks_by_id(user_id, task)
             return self.data_keeper.update_uncomplited_tasks_by_id(user_id, tasks)
         return -1
     

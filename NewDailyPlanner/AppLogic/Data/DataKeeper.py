@@ -1,13 +1,16 @@
+import datetime
 import json
 import os
 
 from config import UNCOMPLITED_TASKS_FILE
 from config import COMPLITED_TASKS_FILE
+from config import FILE_FOR_LOGGING
 
 class DataKeeper():
     def __init__(self):
         self._save_file_uncomplited_tasks = UNCOMPLITED_TASKS_FILE
         self._save_file_complited_tasks = COMPLITED_TASKS_FILE
+        self._logging_file = FILE_FOR_LOGGING
 
     @property
     def save_file_uncomplited_tasks(self):
@@ -16,6 +19,10 @@ class DataKeeper():
     @property
     def save_file_complited_tasks(self):
         return self._save_file_complited_tasks
+
+    @property
+    def logging_file(self):
+        return self._logging_file
 
     #вспомогательные команды
     ##получить список задач по айди
@@ -88,3 +95,9 @@ class DataKeeper():
     def upload_tasks_from_file(self, user_id, file_name):
         tasks = self.get_list_from_file_by_id(user_id, file_name)
         return self.update_uncomplited_tasks_by_id(user_id, tasks)
+
+    ##сохранить задачу в логе
+    def log_complited_task(self, user_id, task):
+        with open(self.logging_file, 'a') as f:
+            date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            f.write(f'{user_id}: {task} | {date_time}')
