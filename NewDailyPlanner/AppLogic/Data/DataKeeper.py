@@ -100,4 +100,4 @@ class DataKeeper():
     def log_complited_task(self, user_id, task):
         with open(self.logging_file, 'a') as f:
             date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            f.write(f'{user_id}: {task} | {date_time}')
+            f.write(f'{user_id}: {task} | {date_time}\n')

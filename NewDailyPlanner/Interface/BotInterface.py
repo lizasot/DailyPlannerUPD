@@ -1,3 +1,4 @@
+from ast import If
 import os
 
 import telebot
@@ -72,7 +73,31 @@ class BotInterface(UserInterface):
             params = message.text.split()
             params[0] = params[0][1:]
             option = params.pop(0)
-            self.command_handler.process_command(option, params)
-            bot.reply_to(message, 'Успешно.')
+            request_for_params = self.command_handler.check_which_parameters_for_command(option)
+            numb = -1
+            text = ''
+            success = True
+            for x in request_for_params:
+                if x == 'choose_task':
+                    if len(params) > 0 and params[0].isdigit():
+                        numb = params.pop(0)
+                    else:
+                        success = False
+                        break
+                elif x == 'enter_content_task':
+                    if len(params) > 0:
+                        text = ' '.join(params)
+                    else:
+                        success = False
+            params.clear()
+            if numb != -1:
+                params.append(numb)
+            if text != '':
+                params.append(text)
+            if success:
+                self.command_handler.process_command(option, params, message.from_user.id)
+                bot.reply_to(message, 'Успешно.')
+            else:
+                bot.reply_to(message, 'Ошибка. Не указаны какие-то параметры. Воспользуйтесь командой /help для справки.')
 
         bot.infinity_polling()
